@@ -4,6 +4,15 @@ Flutter TODO App.
 - [Flutter](https://flutter.dev/)
 - [Dart](https://dart.dev/)
 
+このアプリでできることが以下になります。これらが`UseCase`になります。基本的なCRUD操作ができるようになっています。
+
+- 完了済みTODO一覧を表示
+- 未完了TODO一覧を表示
+- TODOを登録
+- TODOを削除
+- TODOを完了済にする
+- TODOを未完了に戻す
+
 ## Code formatting
 - [Code formatting](https://flutter.dev/docs/development/tools/formatting)
 
@@ -11,45 +20,27 @@ Flutter TODO App.
 - [こちら](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)を参考に作成
 - [Flutter TDD Clean Architecture Course [1] – Explanation & Project Structure](https://resocoder.com/2019/08/27/flutter-tdd-clean-architecture-course-1-explanation-project-structure/)
 
-```
-root/
-├ lib/ # ここが作業ディレクトリ
-| ├ common/ # よく使うWidgetは共通Widgetとして切り出してここに配置
-| ├ components/ # web系でいう、view(ページ)に当たる部分
-| ├ configs/ # グローバルな変数/定数を配置
-| ├ helpers/ # staticな関数を配置
-| ├ models/ # モデルクラスを配置
-| ├ repositories/ # DBアクセス
-| ├ routes/ # ルーティングの設定を配置
-| ├ services/ # ビジネスロジック を配置
-| └ main.dart # メインファイル
-├ .idea # IntelliJのプロジェクト固有の設定ファイル
-├ .metadata # Flutterプロジェクトのプロパティを追跡する。Flutterツールで機能を評価し、アップグレードなどを実行するために使用される
-├ .packages # アプリケーションで使用される依存関係のリスト
-├ android/ # ネイティブのプロジェクトフォルダ
-├ build/ # ビルドされたファイル郡
-├ ios/ # xcode用のiosアプリプロジェクト。iosのネイティブプロジェクトフォルダ
-├ pubspec.lock # パッケージ管理ファイルのpubspec.yamlでは管理しきれない依存関係を管理
-├ pubspec.yaml # 外部のライブラリ（パッケージ）やアプリのメタデータなどを設定するファイル。package.jsonのような役割
-├ test/ # テストファイル郡
-└ {app_name}.iml # [Android Studio関連のファイル](https://stackoverrun.com/ja/q/8457827)
-```
+clean architecture + ViewModel の構成で実装
 ```
 root/
 ├ lib/ # ここが作業ディレクトリ
 | ├ core/ # 汎用的な処理などを配置
+| | ├ error/ # common error handler
+| | ├ network/ # network
+| | └ util/ # utility
 | ├ data/ # すべての入力データ
 | | ├ datasources/ # APIのデータとそのデータをキャッシュする
+| | | ├ local/ # 内部へのアクセスAPI(local DBなどへのアクセス)
+| | | └ remote/ # 外部へのアクセスAPI
 | | ├ models/ # モデル
-| | └ repositories/ # 新しいデータとキャッシュされたデータのどちらを返すか、いつキャッシュするかなどを決定する場所
+| | └ repositories/ # 新しいデータとキャッシュされたデータのどちらを返すか、いつキャッシュするかなどを決定する場所 implements
 | ├ domain/ # 業務に関連するクラスそのものなどを配置.コアビジネスロジックやビジネスオブジェクトをもつ
 | | ├ entities/ # エンティティ.ビジネスオブジェクト
 | | ├ repositories/ # 特定のモデルのデータ永続化についてを抽象化したオブジェクト
-| | └ usecases/ # ユースケース.コアビジネスロジック
 | ├ presentation/ # プレゼンテーション層
-| | ├ bloc/ # bloc
 | | ├ pages/ # ページ
 | | └ widgets/ # ウィジェット一覧
+| ├ viewmodel/ # viewmodel
 | └ main.dart # メインファイル
 ├ .idea # IntelliJのプロジェクト固有の設定ファイル
 ├ .metadata # Flutterプロジェクトのプロパティを追跡する。Flutterツールで機能を評価し、アップグレードなどを実行するために使用される
@@ -75,30 +66,7 @@ root/
 ![](https://i0.wp.com/resocoder.com/wp-content/uploads/2019/08/Clean-Architecture-Flutter-Diagram.png?w=556&ssl=1)
 
 ### BLoC
-- [BLoC](https://bloclibrary.dev/#/)は、Business Logic Componentの頭字語(acronym)で、状態管理に関するアーキテクチャパターン
-
-個人的にですが、構造がVue.jsっぽくてvue.jsをやっている人ならとっつきやすいと思います
-
-- [Flutterの実践導入で用いるBLoC Patternの全体像と押さえておくポイント](https://note.com/yamarkz/n/n7f9106e53179)
-- [Architect your Flutter project using BLOC pattern](https://medium.com/flutterpub/architecting-your-flutter-project-bd04e144a8f1)
-
-![](https://cdn.at-sushi.work/temp/nigirukun-architecture.jpg)
-
-### DB
-
-[sqflite](https://pub.dev/packages/sqflite)
-
-### Repository
-### UseCase
-
-このアプリでできることが以下になります。これらが`UseCase`になります。基本的なCRUD操作ができるようになっています。
-
-- TODO一覧を表示
-- TODOを登録
-- TODOを編集
-- TODOを削除
-- TODOを完了
-- 完了済TODO一覧を表示
+- providerを使うこの構成が一番しっくり来たので、ここでは使わない
 
 ### ViewModel
 ### View <—> ViewModel
@@ -129,12 +97,10 @@ Unit Testが最も簡素なテストで、Integration Testが最も重たいテ�
 - BLoCパターンや単純な関数など
 - `$ flutter test test/unit_test.dart`
 
-
 ### Widget test
 - Widget上での挙動を含めたテスト
 - Seleniumを使用してヘッドレスブラウザでのテストのイメージ
 - `$ flutter test test/widget_test.dart`
-
 
 ### Integration test
 - 結合テスト
@@ -231,6 +197,27 @@ comment: # See: https://docs.codecov.io/docs/pull-request-comments
   require_head: yes
 ```
 
+## エラー対応
+
+### ランチャースクリーン（スプラッシュスクリーン）で止まってしまう
+```bash
+$ flutter run --debug
+```
+
+### リリースモードの場合
+```bash
+$ flutter run --release
+```
+
+## 起動
+```bash
+# シュミレーターを起動
+$ open -a Simulator
+# freezedのコマンド
+$ flutter pub run build_runner build --delete-conflicting-outputs
+$ flutter run
+```
+
 # 参考記事
 - [【Flutter】パッケージ導入手順](https://qiita.com/akeome/items/0a6ebf3af402fdf62c79)
 - [管理しやすい(と思う)Flutterプロジェクトのディレクトリ構造](https://qiita.com/tanakeiQ/items/2c4a7fcb8e95b9aa55ad)
@@ -238,11 +225,12 @@ comment: # See: https://docs.codecov.io/docs/pull-request-comments
 - [Flutter で TODO アプリ📝 を作ってみた！](https://qiita.com/yamatatsu10969/items/3d47cfd66569de98c222)
 - [Flutter でも Codecov を導入して test モチベを上げよう!](https://qiita.com/sensuikan1973/items/551572dc8ec92cc90fdb)
 - [Flutter入門のためのDart入門](https://qiita.com/teradonburi/items/913fb8c311b9f2bdb1dd)
-- [長めだけどたぶんわかりやすいBLoCパターンの解説](https://qiita.com/kabochapo/items/8738223894fb74f952d3)
-- [【Flutter】チーム開発でflutter_blocを導入したらめちゃめちゃ良かった](https://blog.yayawatanabe.net/entry/2020/07/07/184500)
+- [Flutterの状態管理手法の選定](https://medium.com/flutter-jp/state-1daa7fd66b94)
+- [iOSをMVC,MVP,MVVM,Clean Architectureで実装してみた](https://medium.com/@rockname/clean-archirecture-7be37f34c943)
+- [Flutter を MVVM で実装する](https://wasabeef.medium.com/flutter-%E3%82%92-mvvm-%E3%81%A7%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B-861c5dbcc565)
+- [Flutter MVVM architecture using Dependency Injection (DI) + State Management + Repository Pattern](https://medium.com/@cesarmcferreira/flutter-mvvm-architecture-using-dependency-injection-di-state-management-repository-pattern-92a4ef6ddfc3)
 
-- [A Flutter BLoC + Clean Architecture journey to release the #1st Idean Flutter app](https://medium.com/ideas-by-idean/a-flutter-bloc-clean-architecture-journey-to-release-the-1st-idean-flutter-app-db218021a804)
 
-## Flutterのデザインパターン
-- [Flutter: Todo App using BLoC Design Pattern with SQLite](https://medium.com/@vaygeth/reactive-flutter-todo-app-using-bloc-design-pattern-b71e2434f692)
-- [表示のために使ったりする enum は Equatable に準拠させておいた方がテストの時に役に立つ](https://note.com/hayabusabusa/n/nba613b4021e3)
+## メモ
+- data/models/はレスポンスをrepositoriesで扱うようにしたもの
+- UseCaseはViewModelで吸収しているが、分けてもいいかも。flutter-tdd-clean-architecture-courseではblocがViewModelの役割？

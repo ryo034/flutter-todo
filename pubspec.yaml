@@ -23,16 +23,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # scoped_model: ^1.1.0
   # Local cache
   # https://pub.dev/packages/shared_preferences
   shared_preferences: ^0.5.3+4
   # Service locator
   # https://pub.dev/packages/get_it
-  get_it: ^2.0.1
+  # get_it: ^2.0.1
   # Bloc for state management
   # https://pub.dev/packages/flutter_bloc
   # bloc、event、stateを定義し
-  flutter_bloc: ^0.21.0
+  # flutter_bloc: ^0.21.0
   # Value equality
   # https://pub.dev/packages/equatable
   # propsに入っているプロパティが一致しているかを判断することができ、これらの値が全く一緒であればイベントをaddしたとしても、Streamは流れないようにすることができるから
@@ -44,10 +45,17 @@ dependencies:
   # https://pub.dev/packages/connectivity
   # wifi接続なのかどうか、などの接続に関するライブラリ
   connectivity: ^0.4.3+7
+  data_connection_checker: ^0.3.4
+  http: ^0.12.0+3
+  dio: ^3.0.9
+  freezed_annotation: ^0.12.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  english_words: ^3.1.5
+  provider: ^4.3.2+3
+  flutter_slidable: ^0.5.7
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +63,8 @@ dev_dependencies:
   # https://pub.dev/packages/pedantic
   pedantic: ^1.9.0
   mockito: ^4.1.0
+  build_runner: ^1.10.11
+  freezed: ^0.12.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
