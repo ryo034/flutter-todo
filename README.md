@@ -20,10 +20,12 @@ Flutter TODO App.
 - [こちら](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)を参考に作成
 - [Flutter TDD Clean Architecture Course [1] – Explanation & Project Structure](https://resocoder.com/2019/08/27/flutter-tdd-clean-architecture-course-1-explanation-project-structure/)
 
-clean architecture + ViewModel の構成で実装
+- clean architecture + ViewModel の構成で実装
+- ここでは、UseCaseはViewModelで吸収しているが、分けてた方が見通しよくなるし、きれい
+
 ```
 root/
-├ lib/ # ここが作業ディレクトリ
+├ lib/ # ここが作業ディレクトリusecase view
 | ├ core/ # 汎用的な処理などを配置
 | | ├ error/ # common error handler
 | | ├ network/ # network
