@@ -39,3 +39,9 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# generated file
+*.pb.dart
+*.pbgrpc.dart
+*.pbenum.dart
+*.pbjson.dart

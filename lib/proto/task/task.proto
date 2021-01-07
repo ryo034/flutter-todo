@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package task;
+
+import "lib/proto/timestamp.proto";
+
+service TaskService {
+	rpc GetTasks (GetTasksRequest) returns (GetTasksResponse) {}
+}
+
+message Task {
+	int64 taskId = 1;
+	string title = 2;
+
+	// @inject_tag: sql:",notnull,default:false"
+	bool done = 3;
+
+	// @inject_tag: sql:"type:timestamptz,default:now()"
+	google.protobuf.Timestamp createdAt = 4;
+
+	// @inject_tag: sql:"type:timestamptz"
+	google.protobuf.Timestamp updatedAt = 5;
+}
+
+message GetTasksRequest {}
+
+message GetTasksResponse {
+    repeated Task tasks = 1;
+}
